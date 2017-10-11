@@ -27,16 +27,30 @@ public class MainActivity extends AppCompatActivity {
             public void run()
             {
                 try {
-                    URL url = new URL("https://www.google.com.tw");
+                    URL url = new URL("http://rate.bot.com.tw/xrt?Lang=zh-TW");
                     HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                     conn.setRequestMethod("GET");
                     conn.connect();
                     InputStream is = conn.getInputStream();
                     InputStreamReader isr = new InputStreamReader(is);
                     BufferedReader br = new BufferedReader(isr);
+                    StringBuilder sb = new StringBuilder();
+                    String str;
+                    while ((str=br.readLine()) != null)
+                    {
+                        sb.append(str);
+                    }
+                    String result = sb.toString();
+                    int loc1 = result.indexOf("0.2716");
+                    Log.d("LOC1", "loc1:" + loc1);
+                    int loc2 = result.indexOf("日圓 (JPY)");
+                    Log.d("LOC2", "loc2:" + loc2);
+                    int loc3 = result.indexOf("本行現金賣出", loc2);
+                    Log.d("LOC3", "loc3:" + loc3);
 
-                    String str = br.readLine();
-                    Log.d("MYNET", str);
+                    int locJPY = loc3 + 56;
+                    String jpy = result.substring(locJPY, locJPY + 6);
+                    Log.d("LOC", "JPY:" + jpy);
                     br.close();
                     isr.close();
                     is.close();
